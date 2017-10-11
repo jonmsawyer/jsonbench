@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
-import sys, os
+import sys, os, json
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jsonbench.settings')
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
 
 from apps import jsonbench
 from apps import m2mbench
