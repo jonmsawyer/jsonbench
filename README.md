@@ -9,7 +9,7 @@ Let's find out!
 
 ## Getting started
 
-Clone this repository and create your virtual environment
+Clone this repository and create your virtual environment:
 
 ```
 jsonbench/$ mkvirtualenv venv
