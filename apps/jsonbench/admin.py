@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.jsonbench.models import Board, Thread, Post, ForumUser
+
+admin.site.register(Board)
+admin.site.register(Thread)
+admin.site.register(Post)
+admin.site.register(ForumUser)
