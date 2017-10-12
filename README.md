@@ -44,11 +44,20 @@ populate the database:
 (venv) jsonbench/scripts/$ python generate.py
 ```
 
-Next, load the generated fixture data:
+Next, load the generated fixture data.
+
+On Windows:
 
 ```
 (venv) jsonbench/scripts/$ load_jsonbench.bat
 (venv) jsonbench/scripts/$ load_m2mbench.bat
+```
+
+On \*Nix:
+
+```
+(venv) jsonbench/scripts/$ ./load_jsonbench.sh
+(venv) jsonbench/scripts/$ ./load_m2mbench.sh
 ```
 
 > **Please wait while this loads the generated fixture data, this could take a while. Now's a great time to get a coffee :)**
