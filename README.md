@@ -21,7 +21,7 @@ jsonbench/$ mkvirtualenv venv
 Install project requirements:
 
 ```
-jsonbench/$ pip install -r requirements.txt
+(venv) jsonbench/$ pip install -r requirements.txt
 ```
 
 Migrate the database (a new sqlite3 db will be created in `db/`):
