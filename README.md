@@ -12,13 +12,28 @@ Let's find out!
 Clone this repository and create your virtual environment:
 
 ```
+$ cd /path/to/folder
+$ git clone https://github.com/jonmsawyer/jsonbench.git
+$ cd jsonbench/
 jsonbench/$ mkvirtualenv venv
+```
+
+Install project requirements:
+
+```
+jsonbench/$ pip install -r requirements.txt
 ```
 
 Migrate the database (a new sqlite3 db will be created in `db/`):
 
 ```
 (venv) jsonbench/$ python manage.py migrate
+```
+
+Create the superuser:
+
+```
+(venv) jsonbench/$ python manage.py createsuperuser
 ```
 
 Then head into the `scripts/` folder and generate the fixture data that will
@@ -29,23 +44,28 @@ populate the database:
 (venv) jsonbench/scripts/$ python generate.py
 ```
 
-Next, load the data:
+Next, load the generated fixture data:
 
 ```
 (venv) jsonbench/scripts/$ load_jsonbench.bat
 (venv) jsonbench/scripts/$ load_m2mbench.bat
 ```
 
-Create the superuser:
+> **Please wait while this loads the generated fixture data, this could take a while. Now's a great time to get a coffee :)**
+
+Randomly "read" the forum posts, passing in the `username` of the superuser you created:
 
 ```
-(venv) jsonbench/scripts/$ cd ..
-(venv) jsonbench/$ python manage.py createsuperuser
+(venv) jsonbench/scripts/$ python read_posts.py myusername
 ```
+
+> **Please wait while this reads the posts, this could take a while. Now's a great time to get more coffee :)**
+
 
 Run the server:
 
 ```
+(venv) jsonbench/scripts/$ cd ..
 (venv) jsonbench/$ python manage.py runserver
 ```
 
