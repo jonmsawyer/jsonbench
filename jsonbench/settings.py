@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.jsonbench',
     'apps.m2mbench',
+    'apps.benchmark',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +79,16 @@ WSGI_APPLICATION = 'jsonbench.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db', 'db.sqlite3'),
-    }
+        'NAME': os.path.join(BASE_DIR, 'db', 'default.db.sqlite3'),
+    },
+    'jsonbench': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db', 'jsonbench.db.sqlite3'),
+    },
+    'm2mbench': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db', 'm2mbench.db.sqlite3'),
+    },
 }
 
 
