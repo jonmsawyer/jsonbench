@@ -23,7 +23,7 @@ class BenchmarkSuite(models.Model):
     duration = models.DurationField(blank=True, null=True)
     is_complete = models.NullBooleanField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now_add=True, auto_now=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     
     def __str__(self):
         # TODO: Fix references
@@ -33,7 +33,7 @@ class BenchmarkSuite(models.Model):
         )
 
 class BenchmarkStep(models.Model):
-    benchmark = models.ForeignKey(Benchmark)
+    benchmark = models.ForeignKey(BenchmarkSuite)
     step_number = models.PositiveIntegerField()
     description = models.CharField(max_length=255, blank=True, null=True)
     ram_info_before_step = models.CharField(max_length=255, blank=True, null=True)
@@ -47,7 +47,7 @@ class BenchmarkStep(models.Model):
     duration = models.DurationField(blank=True, null=True)
     is_complete = models.NullBooleanField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now_add=True, auto_now=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     
     def __str__(self):
         # TODO: Fix references
@@ -57,10 +57,10 @@ class BenchmarkStep(models.Model):
         )
 
 class BenchmarkLog(models.Model):
-    benchmark = models.ForeignKey(Benchmark)
+    benchmark = models.ForeignKey(BenchmarkSuite)
     log = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now_add=True, auto_now=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     
     def __str__(self):
         return '{id} | Benchmark ID {bid} | Created at {created_at} | Updated at {updated_at}'.format(
