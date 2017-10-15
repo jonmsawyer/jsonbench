@@ -78,6 +78,6 @@ Run the server:
 (venv) jsonbench/$ python manage.py runserver
 ```
 
-In your browser, head on to http://localhost:8000/admin
+In your browser, head on to http://localhost:8000/
 
 Voila!
