@@ -14,11 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
+
+from apps.jsonbench import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^jsonbench/', include('apps.jsonbench.urls', namespace='jsonbench')),
-    url(r'^m2mbench/', include('apps.m2mbench.urls', namespace='m2mbench')),
-    url(r'^$', include('apps.benchmark.urls', namespace='benchmark')),
+    url(r'^view_board/([0-9]+)/$', views.view_board, name='view_board'),
+    url(r'^view_board/$', views.view_board, name='view_board'),
+    url(r'^view_thread/([0-9]+)/([0-9]+)/$', views.view_thread, name='view_thread'),
+    url(r'^view_thread/$', views.view_thread, name='view_thread'),
+    url(r'^view_post/([0-9]+)/([0-9]+)/([0-9]+)/$', views.view_post, name='view_post'),
+    url(r'^index/$', views.index, name='index'),
+    url(r'^$', views.index, name='index'),
 ]

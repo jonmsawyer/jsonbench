@@ -1,0 +1,42 @@
+{% load m2mbench_extras %}<h1>m2mbench view_thread</h1>
+<p><a href="{% url 'm2mbench:index' %}?ipage={{ipage}}&amp;{{prof}}">&laquo; back to index page {{ipage}}</a></p>
+<p style="margin-left:20px;"><a href="{% url 'm2mbench:view_board' board.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;{{prof}}">&laquo; back to {{board.name}} page {{bpage}}</a></p>
+<p>start here:</p>
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{posts.previous_page_number}}&amp;{{prof}}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{posts.number}} of {{posts.paginator.num_pages}}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{posts.next_page_number}}&amp;{{prof}}">next</a>
+        {% endif %}
+    </span>
+</div>
+<ul>
+{% for post in posts %}
+    <li><a href="{% url 'm2mbench:view_post' board.id thread.id post.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{posts.number}}&amp;ppage={{posts.number|subtract:1|multiply:posts_per_page|add:forloop.counter}}&amp;{{prof}}">{{post.name}}</a></li>
+{% empty %}
+    <li>No posts to display</li>
+{% endfor %}
+</ul>
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{posts.previous_page_number}}&amp;{{prof}}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{posts.number}} of {{posts.paginator.num_pages}}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{posts.next_page_number}}&amp;{{prof}}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% if prof %}<h1>profile</h1>{% endif %}

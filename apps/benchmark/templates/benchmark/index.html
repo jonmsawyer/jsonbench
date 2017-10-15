@@ -1,0 +1,8 @@
+<h1>benchmark</h1>
+<a href="?">no profile for this page</a> | <a href="?prof">yes profile for this page</a>
+<ul>
+{% for app in apps %}
+    <li>{{app.1}} - <a href="{% url app.0 %}">no profiling</a> | <a href="{% url app.0 %}?prof">yes profiling</a></li>
+{% endfor %}
+</ul>
+{% if prof %}<h1>profile</h1>{% endif %}

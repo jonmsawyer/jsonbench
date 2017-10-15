@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.benchmark.middleware.ProfilerMiddleware',
 ]
 
 ROOT_URLCONF = 'jsonbench.urls'
@@ -129,3 +130,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# jsonbench project settings
+
+JSONBENCH_APPS = ['jsonbench', 'm2mbench']
+JSONBENCH_BOARDS_PER_PAGE = 5
+JSONBENCH_THREADS_PER_PAGE = 20
+JSONBENCH_POSTS_PER_PAGE = 50
