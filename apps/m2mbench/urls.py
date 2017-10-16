@@ -18,11 +18,11 @@ from django.conf.urls import include, url
 from apps.m2mbench import views
 
 urlpatterns = [
-    url(r'^view_board/([0-9]+)/$', views.view_board, name='view_board'),
-    url(r'^view_board/$', views.view_board, name='view_board'),
-    url(r'^view_thread/([0-9]+)/([0-9]+)/$', views.view_thread, name='view_thread'),
-    url(r'^view_thread/$', views.view_thread, name='view_thread'),
-    url(r'^view_post/([0-9]+)/([0-9]+)/([0-9]+)/$', views.view_post, name='view_post'),
-    url(r'^index/$', views.index, name='index'),
-    url(r'^$', views.index, name='index'),
+    url(r'^view_board/([0-9]+)/', views.view_board, name='view_board'),
+    url(r'^view_board/', views.view_board, name='view_board'),
+    url(r'^view_thread/([0-9]+)/([0-9]+)/', views.view_thread, name='view_thread'),
+    url(r'^view_thread/', views.view_thread, name='view_thread'),
+    url(r'^view_post/([0-9]+)/([0-9]+)/([0-9]+)/', views.view_post, name='view_post'),
+    url(r'^index/', views.index, name='index'),
+    url(r'', views.index, name='index'),
 ]

@@ -20,5 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^jsonbench/', include('apps.jsonbench.urls', namespace='jsonbench')),
     url(r'^m2mbench/', include('apps.m2mbench.urls', namespace='m2mbench')),
-    url(r'^$', include('apps.benchmark.urls', namespace='benchmark')),
+    url(r'', include('apps.benchmark.urls', namespace='benchmark')),
 ]

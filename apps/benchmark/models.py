@@ -1,5 +1,13 @@
+import platform, re
+
+import django
+from django.utils import timezone
 from django.db import models
 
+import psutil
+
+
+app_re = re.compile('func=(.*?),')
 
 class BenchmarkSuite(models.Model):
     suite_name = models.CharField(max_length=255, blank=True, null=True)
@@ -26,11 +34,68 @@ class BenchmarkSuite(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     
     def __str__(self):
-        # TODO: Fix references
-        return '{id} | {created_at} | {app} | {suite} | {db_type} | {django_version}'.format(
-            id=self.id, created_at=self.created_at, app=self.app,
-            suite=self.suite, db_type=self.db_type, django_version=self.django_version
+        return '{id} | {created_at} | {app} | {suite} | {duration}'.format(
+            id=self.id, created_at=self.created_at, app=self.app_to_benchmark,
+            suite=self.suite_name, duration=self.duration
         )
+    
+    @staticmethod
+    def NewWebBenchmarkSuite(request, name):
+        try:
+            matches = app_re.search(str(request.resolver_match))
+            app = matches.groups()[0]
+        except Exception as e:
+            app = str(request.resolver_match)
+        bs = BenchmarkSuite(
+            suite_name='web.{}.request.{} {}'.format(name, request.method, request.get_full_path()),
+            app_to_benchmark=app,
+            cpu_info=str(platform.uname()),
+            python_info=str(platform.python_build()),
+            django_info=django.get_version(),
+            django_user=str(request.user)
+        )
+        bs.save()
+        return bs
+    
+    def start(self):
+        self.is_complete = None
+        self.end_time = None
+        self.begin_time = timezone.now()
+        self.is_complete = None
+        self.save()
+    
+    def stop(self):
+        self.is_complete = True
+        self.end_time = timezone.now()
+        self.duration = self.end_time - self.begin_time
+        self.is_complete = True
+        self.save()
+    
+    def next_step(self, request, name):
+        try:
+            current_step = self.current_step
+            current_step.stop()
+        except:
+            current_step = None
+        if current_step is not None:
+            next_step = current_step.step_number + 1
+        else:
+            next_step = 1
+        try:
+            matches = app_re.search(str(request.resolver_match))
+            app = matches.groups()[0]
+        except Exception as e:
+            app = str(request.resolver_match)
+        bs = BenchmarkStep(
+            benchmark=self,
+            step_number=next_step,
+            description='{} | {}'.format(name, app)
+        )
+        bs.save()
+        self.current_step = bs
+    
+    def log(self, log):
+        BenchmarkLog(benchmark=self, log=log).save()
 
 class BenchmarkStep(models.Model):
     benchmark = models.ForeignKey(BenchmarkSuite)
@@ -53,8 +118,23 @@ class BenchmarkStep(models.Model):
         # TODO: Fix references
         return '{id} | Benchmark ID {bid} | Step {number} | {description}'.format(
             id=self.id, bid=self.benchmark.id,
-            number=self.number, description=self.description
+            number=self.step_number, description=self.description
         )
+    
+    def start(self):
+        self.begin_time = timezone.now()
+        self.end_time = None
+        self.duration = None
+        self.is_complete = None
+        self.ram_info_before_step = str(psutil.virtual_memory())
+        self.save()
+    
+    def stop(self):
+        self.end_time = timezone.now()
+        self.duration = self.end_time - self.begin_time
+        self.is_complete = True
+        self.ram_info_after_step = str(psutil.virtual_memory())
+        self.save()
 
 class BenchmarkLog(models.Model):
     benchmark = models.ForeignKey(BenchmarkSuite)

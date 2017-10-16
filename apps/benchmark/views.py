@@ -7,4 +7,6 @@ def index(request):
     for app in settings.JSONBENCH_APPS:
         _app = apps.get_app_config(app)
         cd['apps'].append(('{}:index'.format(_app.label), _app.label))
+    cd['prof'] = 'prof' if 'prof' in request.GET else ''
+    cd['request_dict'] = dict(request)
     return render(request, 'benchmark/index.html', cd)

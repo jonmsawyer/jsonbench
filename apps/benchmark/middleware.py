@@ -1,38 +1,51 @@
 import sys
 import cProfile
 from io import StringIO
+from pprint import pprint
 
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
+from apps.benchmark.models import BenchmarkSuite
+
+
 class ProfilerMiddleware(MiddlewareMixin):
-    #def __init__(self, get_response):
-    #    self.get_response = get_response
-    #    # One-time configuration and initialization.
-    #
-    #def __call__(self, request):
-    #    # Code to be executed for each request before
-    #    # the view (and later middleware) are called.
-    #
-    #    response = self.get_response(request)
-    #
-    #    # Code to be executed for each request/response after
-    #    # the view is called.
-    #
-    #    return response
-    
     def process_view(self, request, callback, callback_args, callback_kwargs):
         if settings.DEBUG and 'prof' in request.GET:
+            self.latest_exception = ''
+            try:
+                self.benchmarksuite = BenchmarkSuite.NewWebBenchmarkSuite(request, 'ProfilerMiddleware')
+                self.benchmarksuite.start()
+                self.benchmarksuite.next_step(request, 'ProfilerMiddleware')
+                self.benchmarksuite.current_step.start()
+            except Exception as e:
+                self.latest_exception = str(e)
             self.profiler = cProfile.Profile()
             args = (request,) + callback_args
-            return self.profiler.runcall(callback, *args, **callback_kwargs)
+            ret =  self.profiler.runcall(callback, *args, **callback_kwargs)
+            self.profiler.create_stats()
+            try:
+                self.benchmarksuite.current_step.stop()
+                self.benchmarksuite.stop()
+            except:
+                pass
+            return ret
     
     def process_response(self, request, response):
         if settings.DEBUG and 'prof' in request.GET:
-            self.profiler.create_stats()
             out = StringIO()
             old_stdout, sys.stdout = sys.stdout, out
             self.profiler.print_stats(1)
             sys.stdout = old_stdout
-            response.content += bytes('<pre>%s</pre>' % out.getvalue(), 'utf-8')
+            if self.latest_exception:
+                exception_string = '<pre>{}</pre>'.format(self.latest_exception)
+            else:
+                exception_string = ''
+            response.content += bytes('%s<pre>%s</pre>' % (
+                exception_string, out.getvalue()
+            ), 'utf-8')
+            try:
+                self.benchmarksuite.log(out.getvalue())
+            except:
+                pass
         return response
