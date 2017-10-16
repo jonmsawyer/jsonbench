@@ -1,3 +1,5 @@
+import json
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.conf import settings
@@ -59,6 +61,7 @@ def view_thread(request, board_id=None, thread_id=None):
 
 def view_post(request, board_id=None, thread_id=None, post_id=None):
     cd = {'board_id': board_id, 'thread_id': thread_id, 'post_id': post_id, 'posts': None, 'prof': None}
+    bs = request.benchmarksuite
     board = Board.objects.get(pk=board_id)
     thread = Thread.objects.get(pk=thread_id)
     post = Post.objects.get(pk=post_id)
@@ -83,9 +86,58 @@ def view_post(request, board_id=None, thread_id=None, post_id=None):
         for prev_post in prev_posts:
             cd['prev_post'] = prev_post # shoud only loop once
             cd['prev_post_tpage'] = int((prev_posts.number - 1)/posts_per_page) + 1
+    else:
+        cd['prev_post'] = None
+        cd['prev_post_tpage'] = posts.number
     if posts.has_next():
         next_posts = p.page(posts.next_page_number())
         for next_post in next_posts:
             cd['next_post'] = next_post # should only loop once
             cd['next_post_tpage'] = int((next_posts.number - 1)/posts_per_page) + 1
+    else:
+        cd['next_post'] = None
+        cd['next_post_tpage'] = posts.number
+    if request.GET.get('mark_read'):
+        bs.next_step(request, 'jsonbench: before read_post') if bs else None
+        cd['post_has_been_read'] = read_post(thread, post, request.user)
+        bs.next_step(request, 'jsonbench: after read_post') if bs else None
+    if request.GET.get('mark_unread'):
+        bs.next_step(request, 'jsonbench: before unread_post') if bs else None
+        cd['post_has_been_unread'] = unread_post(thread, post, request.user)
+        bs.next_step(request, 'jsonbench: after unread_post') if bs else None
+    bs.next_step(request, 'jsonbench: before is_post_read') if bs else None
+    cd['post_is_read'] = is_post_read(thread, post, request.user)
+    bs.next_step(request, 'jsonbench: after read_post') if bs else None
     return render(request, 'jsonbench/view_post.html', cd)
+
+def is_post_read(thread, post, user):
+    read_posts = json.loads(ForumUser.objects.get(user=user).posts_read)
+    if post.id in read_posts.get(str(thread.id)):
+        return True
+    else:
+        return False
+
+def read_post(thread, post, user):
+    try:
+        forum_user = ForumUser.objects.get(user=user)
+        read_posts = json.loads(forum_user.posts_read)
+        read_posts.get(str(thread.id)).append(post.id)
+        forum_user.posts_read = json.dumps(read_posts, indent=4)
+        forum_user.save()
+        return True
+    except:
+        return False
+
+def unread_post(thread, post, user):
+    try:
+        forum_user = ForumUser.objects.get(user=user)
+        read_posts = json.loads(forum_user.posts_read)
+        if post.id in read_posts.get(str(thread.id)):
+            read_posts.get(str(thread.id)).remove(post.id)
+            forum_user.posts_read = json.dumps(read_posts, indent=4)
+            forum_user.save()
+            return True
+        else:
+            return False
+    except:
+        return False

@@ -17,19 +17,21 @@ class ProfilerMiddleware(MiddlewareMixin):
                 self.benchmarksuite = BenchmarkSuite.NewWebBenchmarkSuite(request, 'ProfilerMiddleware')
                 self.benchmarksuite.start()
                 self.benchmarksuite.next_step(request, 'ProfilerMiddleware')
-                self.benchmarksuite.current_step.start()
             except Exception as e:
+                self.benchmarksuite = None
                 self.latest_exception = str(e)
             self.profiler = cProfile.Profile()
+            request.benchmarksuite = self.benchmarksuite
             args = (request,) + callback_args
             ret =  self.profiler.runcall(callback, *args, **callback_kwargs)
             self.profiler.create_stats()
             try:
-                self.benchmarksuite.current_step.stop()
                 self.benchmarksuite.stop()
             except:
                 pass
             return ret
+        else:
+            request.benchmarksuite = None
     
     def process_response(self, request, response):
         if settings.DEBUG and 'prof' in request.GET:

@@ -65,6 +65,10 @@ class BenchmarkSuite(models.Model):
         self.save()
     
     def stop(self):
+        try:
+            self.current_step.stop()
+        except:
+            pass
         self.is_complete = True
         self.end_time = timezone.now()
         self.duration = self.end_time - self.begin_time
@@ -75,11 +79,9 @@ class BenchmarkSuite(models.Model):
         try:
             current_step = self.current_step
             current_step.stop()
+            next_step = current_step.step_number + 1
         except:
             current_step = None
-        if current_step is not None:
-            next_step = current_step.step_number + 1
-        else:
             next_step = 1
         try:
             matches = app_re.search(str(request.resolver_match))
@@ -92,6 +94,7 @@ class BenchmarkSuite(models.Model):
             description='{} | {}'.format(name, app)
         )
         bs.save()
+        bs.start()
         self.current_step = bs
     
     def log(self, log):

@@ -19,6 +19,27 @@
     </span>
 </div>
 <p>{{post}}</p>
+<p>
+{% if post_is_read %}
+    this post was previously read | <a href="{% url 'm2mbench:view_post' board.id thread.id post.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{tpage}}&amp;ppage={{ppage}}&amp;mark_unread=1&amp;{{prof}}">mark as unread</a>
+{% else %}
+    this post is unread | <a href="{% url 'm2mbench:view_post' board.id thread.id post.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{tpage}}&amp;ppage={{ppage}}&amp;mark_read=1&amp;{{prof}}">mark as read</a>
+{% endif %}
+    | <a href="{% url 'm2mbench:view_post' board.id thread.id post.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{tpage}}&amp;ppage={{ppage}}&amp;{{prof}}">refresh post</a>
+{% if prof %}
+    | <a href="{% url 'm2mbench:view_post' board.id thread.id post.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{tpage}}&amp;ppage={{ppage}}">stop profiling</a>
+{% else %}
+    | <a href="{% url 'm2mbench:view_post' board.id thread.id post.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{tpage}}&amp;ppage={{ppage}}&amp;prof">start profiling</a>
+{% endif %}
+</p>
+<p>
+{% if post_has_been_read %}
+    {{user}} just marked this post as read
+{% endif %}
+{% if post_has_been_unread %}
+    {{user}} just marked this post as unread
+{% endif %}
+</p>
 <div class="pagination">
     <span class="step-links">
         {% if posts.has_previous %}
