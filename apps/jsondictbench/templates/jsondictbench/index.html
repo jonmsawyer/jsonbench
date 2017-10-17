@@ -1,4 +1,4 @@
-<h1>jsonbench index</h1>
+<h1>jsondictbench index</h1>
 <p><a href="{% url 'admin:index' %}">go to django admin</a></p>
 <p><a href="{% url 'benchmark:index' %}?{{prof}}">&laquo; back to root</a></p>
 <p>start here:</p>
@@ -19,7 +19,7 @@
 </div>
 <ul>
 {% for board in boards %}
-    <li><a href="{% url 'jsonbench:view_board' board.id %}?ipage={{boards.number}}&amp;{{prof}}">{{board.name}}</a></li>
+    <li><a href="{% url 'jsondictbench:view_board' board.id %}?ipage={{boards.number}}&amp;{{prof}}">{{board.name}}</a></li>
 {% empty %}
     <li>No boards to display</li>
 {% endfor %}

@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.conf import settings
 
-from apps.jsonbench.models import Board, Thread, Post, ForumUser
+from apps.jsondictbench.models import Board, Thread, Post, ForumUser
 
 boards_per_page = settings.JSONBENCH_BOARDS_PER_PAGE
 threads_per_page = settings.JSONBENCH_THREADS_PER_PAGE
@@ -23,7 +23,7 @@ def index(request):
         boards = p.page(p.num_pages)
     cd['boards'] = boards
     cd['prof'] = 'prof' if 'prof' in request.GET else ''
-    return render(request, 'jsonbench/index.html', cd)
+    return render(request, 'jsondictbench/index.html', cd)
 
 @login_required
 def view_board(request, board_id=None):
@@ -40,7 +40,7 @@ def view_board(request, board_id=None):
     cd['threads'] = threads
     cd['prof'] = 'prof' if 'prof' in request.GET else ''
     cd['ipage'] = request.GET.get('ipage', '')
-    return render(request, 'jsonbench/view_board.html', cd)
+    return render(request, 'jsondictbench/view_board.html', cd)
 
 @login_required
 def view_thread(request, board_id=None, thread_id=None):
@@ -61,7 +61,7 @@ def view_thread(request, board_id=None, thread_id=None):
     cd['ipage'] = request.GET.get('ipage', '')
     cd['bpage'] = request.GET.get('bpage', '')
     cd['posts_per_page'] = posts_per_page
-    return render(request, 'jsonbench/view_thread.html', cd)
+    return render(request, 'jsondictbench/view_thread.html', cd)
 
 @login_required
 def view_post(request, board_id=None, thread_id=None, post_id=None):
@@ -103,29 +103,34 @@ def view_post(request, board_id=None, thread_id=None, post_id=None):
         cd['next_post'] = None
         cd['next_post_tpage'] = posts.number
     if request.GET.get('mark_read'):
-        bs.next_step(request, 'jsonbench: before read_post') if bs else None
+        bs.next_step(request, 'jsondictbench: before read_post') if bs else None
         cd['post_has_been_read'] = read_post(thread, post, request.user)
-        bs.next_step(request, 'jsonbench: after read_post') if bs else None
+        bs.next_step(request, 'jsondictbench: after read_post') if bs else None
     if request.GET.get('mark_unread'):
-        bs.next_step(request, 'jsonbench: before unread_post') if bs else None
+        bs.next_step(request, 'jsondictbench: before unread_post') if bs else None
         cd['post_has_been_unread'] = unread_post(thread, post, request.user)
-        bs.next_step(request, 'jsonbench: after unread_post') if bs else None
-    bs.next_step(request, 'jsonbench: before is_post_read') if bs else None
+        bs.next_step(request, 'jsondictbench: after unread_post') if bs else None
+    bs.next_step(request, 'jsondictbench: before is_post_read') if bs else None
     cd['post_is_read'] = is_post_read(thread, post, request.user)
-    bs.next_step(request, 'jsonbench: after read_post') if bs else None
-    return render(request, 'jsonbench/view_post.html', cd)
+    bs.next_step(request, 'jsondictbench: after read_post') if bs else None
+    return render(request, 'jsondictbench/view_post.html', cd)
 
 def is_post_read(thread, post, user):
     read_posts = json.loads(ForumUser.objects.get(user=user).posts_read)
-    if post.id in read_posts.get(str(thread.id)):
-        return True
-    else:
+    try:
+        if post.id in read_posts.get(str(thread.id)):
+            return True
+        else:
+            return False
+    except TypeError: # thread.id is not in read_posts dict, which results in NoneType
         return False
 
 def read_post(thread, post, user):
     try:
         forum_user = ForumUser.objects.get(user=user)
         read_posts = json.loads(forum_user.posts_read)
+        if str(thread.id) not in read_posts:
+            read_posts[str(thread.id)] = []
         read_posts.get(str(thread.id)).append(post.id)
         forum_user.posts_read = json.dumps(read_posts, indent=4)
         forum_user.save()

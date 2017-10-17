@@ -1,4 +1,4 @@
-"""jsonbench URL Configuration
+"""jsondictbench URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -18,7 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^jsonbench/', include('apps.jsonbench.urls', namespace='jsonbench')),
+    url(r'^jsondictbench/', include('apps.jsondictbench.urls', namespace='jsondictbench')),
     url(r'^m2mbench/', include('apps.m2mbench.urls', namespace='m2mbench')),
     url(r'', include('apps.benchmark.urls', namespace='benchmark')),
 ]

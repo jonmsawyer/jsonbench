@@ -1,6 +1,8 @@
 *~
 db/*
 scripts/*.json
+apps/jsondictbench/fixtures/*.json
+apps/m2mbench/fixtures/*.json
 \#*\#
 
 # Byte-compiled / optimized / DLL files

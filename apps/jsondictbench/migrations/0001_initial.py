@@ -43,12 +43,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='jsonbench.Board')),
+                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='jsondictbench.Board')),
             ],
         ),
         migrations.AddField(
             model_name='post',
             name='thread',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='jsonbench.Thread'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='jsondictbench.Thread'),
         ),
     ]

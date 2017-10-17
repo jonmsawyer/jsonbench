@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.jsonbench',
+    'apps.jsondictbench',
     'apps.m2mbench',
 ]
 
@@ -81,9 +81,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db', 'default.db.sqlite3'),
     },
-    'jsonbench': {
+    'jsondictbench': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db', 'jsonbench.db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db', 'jsondictbench.db.sqlite3'),
     },
     'm2mbench': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -136,7 +136,11 @@ LOGIN_URL = '/admin/'
 
 # jsonbench project settings
 
-JSONBENCH_APPS = ['jsonbench', 'm2mbench']
+JSONBENCH_APPS = ['jsondictbench', 'm2mbench']
+JSONBENCH_NUM_BOARDS = 10
+JSONBENCH_NUM_THREADS = 100
+JSONBENCH_NUM_POSTS = 1000
 JSONBENCH_BOARDS_PER_PAGE = 5
 JSONBENCH_THREADS_PER_PAGE = 20
 JSONBENCH_POSTS_PER_PAGE = 50
+JSONBENCH_PERCENT_POSTS_TO_READ = 40 # Integer in the domain of [0, 100]
