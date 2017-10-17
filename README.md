@@ -44,21 +44,23 @@ populate the database:
 (venv) jsonbench/scripts/$ python generate.py
 ```
 
+> **Note: `jsondictbench` has been removed from the `generate.py` script. Instead, run `manage.py jsondictbench_generate -h`.**
+
 Next, load the generated fixture data.
 
 On Windows:
 
 ```
-(venv) jsonbench/scripts/$ load_jsonbench.bat
 (venv) jsonbench/scripts/$ load_m2mbench.bat
 ```
 
 On \*Nix:
 
 ```
-(venv) jsonbench/scripts/$ ./load_jsonbench.sh
 (venv) jsonbench/scripts/$ ./load_m2mbench.sh
 ```
+
+> **Note: `jsondictbench` has been removed from the loading scripts. Instead, run `manage.py jsondictbench_load -h`.**
 
 > **Please wait while this loads the generated fixture data, this could take a while. Now's a great time to get a coffee :)**
 
@@ -68,8 +70,9 @@ Randomly "read" the forum posts, passing in the `username` of the superuser you 
 (venv) jsonbench/scripts/$ python read_posts.py myusername
 ```
 
-> **Please wait while this reads the posts, this could take a while. Now's a great time to get more coffee :)**
+> **Note: `jsondictbench` has been removed from the `read_posts.py` script. Instead, run `manage.py jsondictbench_read_posts -h`.**
 
+> **Please wait while this reads the posts, this could take a while. Now's a great time to get more coffee :)**
 
 Run the server:
 
@@ -78,6 +81,6 @@ Run the server:
 (venv) jsonbench/$ python manage.py runserver
 ```
 
-In your browser, head on to http://localhost:8000/
+In your browser, head on over to http://localhost:8000/ for web benchmarking, head on over to http://localhost:8000/admin/ for for the Django Admin.
 
 Voila!
