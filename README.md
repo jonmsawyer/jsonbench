@@ -36,51 +36,41 @@ Create the superuser:
 (venv) jsonbench/$ python manage.py createsuperuser
 ```
 
-Then head into the `scripts/` folder and generate the fixture data that will
-populate the database:
+Generate fixture data for the apps you're interested in benchmarking:
 
 ```
-(venv) jsonbench/$ cd scripts/
-(venv) jsonbench/scripts/$ python generate.py
+(venv) jsonbench/$ python manage.py jsondictbench_generate
+(vent) jsonbench/$ python manage.py m2mbench_generate
 ```
 
-> **Note: `jsondictbench` has been removed from the `generate.py` script. Instead, run `manage.py jsondictbench_generate -h`.**
-
-Next, load the generated fixture data.
-
-On Windows:
+Load the generated fixture data.
 
 ```
-(venv) jsonbench/scripts/$ load_m2mbench.bat
+(venv) jsonbench/$ python manage.py jsondictbench_load
+(vent) jsonbench/$ python manage.py m2mbench_load
 ```
 
-On \*Nix:
-
-```
-(venv) jsonbench/scripts/$ ./load_m2mbench.sh
-```
-
-> **Note: `jsondictbench` has been removed from the loading scripts. Instead, run `manage.py jsondictbench_load -h`.**
-
-> **Please wait while this loads the generated fixture data, this could take a while. Now's a great time to get a coffee :)**
+> **Please wait while this loads the generated fixture data, this could take a while.
+> Now's a great time to get a coffee :)**
 
 Randomly "read" the forum posts, passing in the `username` of the superuser you created:
 
 ```
-(venv) jsonbench/scripts/$ python read_posts.py myusername
+(venv) jsonbench/$ python manage.py jsondictbench_read_posts
+(vent) jsonbench/$ python manage.py m2mbench_read_posts
 ```
 
-> **Note: `jsondictbench` has been removed from the `read_posts.py` script. Instead, run `manage.py jsondictbench_read_posts -h`.**
-
-> **Please wait while this reads the posts, this could take a while. Now's a great time to get more coffee :)**
+> **Please wait while this reads the posts, this could take a while.
+> Now's a great time to get more coffee :)**
 
 Run the server:
 
 ```
 (venv) jsonbench/scripts/$ cd ..
-(venv) jsonbench/$ python manage.py runserver
+(venv) jsonbench/$ python manage.py runserver 8000
 ```
 
-In your browser, head on over to http://localhost:8000/ for web benchmarking, head on over to http://localhost:8000/admin/ for for the Django Admin.
+In your browser, head on over to http://localhost:8000/ for web benchmarking,
+head on over to http://localhost:8000/admin/ for for the Django Admin.
 
 Voila!

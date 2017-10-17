@@ -15,6 +15,8 @@ class Command(_BaseCommand):
     def get_first_post_pk(self):
         try:
             return Post.objects.order_by('id')[0].id
+        except IndexError:
+            return 1
         except Post.DoesNotExist:
             return -1
     

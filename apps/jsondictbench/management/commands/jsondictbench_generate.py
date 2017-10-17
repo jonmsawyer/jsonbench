@@ -14,18 +14,24 @@ class Command(_BaseCommand):
     def get_next_board_pk(self):
         try:
             return Board.objects.order_by('-id')[0].id + 1
+        except IndexError:
+            return 1
         except Board.DoesNotExist:
             return 1
     
     def get_next_thread_pk(self):
         try:
             return Thread.objects.order_by('-id')[0].id + 1
+        except IndexError:
+            return 1
         except Thread.DoesNotExist:
             return 1
     
     def get_next_post_pk(self):
         try:
             return Post.objects.order_by('-id')[0].id + 1
+        except IndexError:
+            return 1
         except Post.DoesNotExist:
             return 1
     
