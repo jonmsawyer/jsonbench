@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
 from django.apps import apps
 
+@login_required
 def index(request):
     cd = {'apps': []}
     for app in settings.JSONBENCH_APPS:

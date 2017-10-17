@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.conf import settings
@@ -9,6 +10,7 @@ boards_per_page = settings.JSONBENCH_BOARDS_PER_PAGE
 threads_per_page = settings.JSONBENCH_THREADS_PER_PAGE
 posts_per_page = settings.JSONBENCH_POSTS_PER_PAGE
 
+@login_required
 def index(request):
     cd = {'boards': None, 'prof': None}
     p = Paginator(Board.objects.all(), boards_per_page)
@@ -22,6 +24,7 @@ def index(request):
     cd['prof'] = 'prof' if 'prof' in request.GET else ''
     return render(request, 'm2mbench/index.html', cd)
 
+@login_required
 def view_board(request, board_id=None):
     cd = {'board_id': board_id, 'threads': None, 'prof': None}
     board = Board.objects.get(pk=board_id)
@@ -38,6 +41,7 @@ def view_board(request, board_id=None):
     cd['ipage'] = request.GET.get('ipage', '')
     return render(request, 'm2mbench/view_board.html', cd)
 
+@login_required
 def view_thread(request, board_id=None, thread_id=None):
     cd = {'board_id': board_id, 'thread_id': thread_id, 'posts': None, 'prof': None}
     board = Board.objects.get(pk=board_id)
@@ -58,6 +62,7 @@ def view_thread(request, board_id=None, thread_id=None):
     cd['posts_per_page'] = posts_per_page
     return render(request, 'm2mbench/view_thread.html', cd)
 
+@login_required
 def view_post(request, board_id=None, thread_id=None, post_id=None):
     cd = {'board_id': board_id, 'thread_id': thread_id, 'post_id': post_id, 'posts': None, 'prof': None}
     bs = request.benchmarksuite

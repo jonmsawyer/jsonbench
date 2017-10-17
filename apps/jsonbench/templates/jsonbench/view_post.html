@@ -1,4 +1,5 @@
 <h1>jsonbench view_post</h1>
+<p><a href="{% url 'admin:index' %}">go to django admin</a></p>
 <p><a href="{% url 'jsonbench:index' %}?ipage={{ipage}}&amp;{{prof}}">&laquo; back to index page {{ipage}}</a></p>
 <p style="margin-left:20px;"><a href="{% url 'jsonbench:view_board' board.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;{{prof}}">&laquo; back to {{board.name}} page {{bpage}}</a></p>
 <p style="margin-left:40px;"><a href="{% url 'jsonbench:view_thread' board.id thread.id %}?ipage={{ipage}}&amp;bpage={{bpage}}&amp;tpage={{tpage}}&amp;{{prof}}">&laquo; back to {{thread.name}} page {{tpage}}</a></p>

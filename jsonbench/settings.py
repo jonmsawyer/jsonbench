@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'apps.benchmark',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.jsonbench',
     'apps.m2mbench',
-    'apps.benchmark',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'jsonbench.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -130,6 +129,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Login
+
+LOGIN_URL = '/admin/'
 
 # jsonbench project settings
 
