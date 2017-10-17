@@ -3,7 +3,7 @@
 Settling an old debate... Using Python/Django, is it more efficient to track
 user read posts with a Many to Many database relationship between a User and
 the Posts they've read? Or is it more efficient to use a Django Model TextField
-to store a JSON object representing a the Posts a User has read?
+to store a JSON object representing the Posts a User has read?
 
 Let's find out!
 
